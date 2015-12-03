@@ -1,12 +1,11 @@
 var path = require('path');
-var os = require('os');
 var notifier = require('node-notifier');
 
 var DEFAULT_LOGO = path.join(__dirname, 'logo.png');
 
 var WebpackNotifierPlugin = module.exports = function(options) {
     this.options = options || {};
-    this.lastBuildSucceeded = false;
+    this.lastBuildSucceeded = this.options.excludeFirstSuccess ? true : false;
 };
 
 WebpackNotifierPlugin.prototype.compileMessage = function(stats) {
@@ -49,7 +48,6 @@ WebpackNotifierPlugin.prototype.compilationDone = function(stats) {
             title: this.options.title || 'Webpack',
             message: msg,
             contentImage: contentImage,
-            icon: (os.platform() === 'win32') ? contentImage : undefined
         });
     }
 };
